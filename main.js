@@ -45,6 +45,19 @@ const pAequorFactory = (specimenNum, dna) => {
       let survivalChance = (count/this.dna.length)*100;
       return survivalChance >= 60 ? true : false;
     },
+    complimentaryStrand() {
+      let compliment = [];
+      for(let i = 0; i < this.dna.length; i++) {
+        if(this.dna[i] === 'A') {
+          compliment.push('T');
+        } else if(this.dna[i] === 'T') {
+          compliment.push('A');
+        } else if(this.dna[i] === 'C') {
+          compliment.push('G');
+        } else compliment.push('C');
+      }
+      return compliment;
+    },
   };
 };
 
@@ -67,6 +80,31 @@ const mutantGenerator = () => {
   
   return survivors;
 };
+
+// Supplied using chatGPT (findMostRelatedInstances)
+function findMostRelatedInstances(pAequorInstances) {
+  let mostRelatedPair = {
+    instance1: null,
+    instance2: null,
+    similarity: 0
+  };
+
+  for (let i = 0; i < pAequorInstances.length - 1; i++) {
+    for (let j = i + 1; j < pAequorInstances.length; j++) {
+      const similarity = pAequorInstances[i].compareDNA(pAequorInstances[j]);
+      if (similarity > mostRelatedPair.similarity) {
+        mostRelatedPair.instance1 = pAequorInstances[i];
+        mostRelatedPair.instance2 = pAequorInstances[j];
+        mostRelatedPair.similarity = similarity;
+      }
+    }
+  }
+
+  return mostRelatedPair;
+}
+
+const mostRelatedPair = findMostRelatedInstances(pAequorInstances);
+console.log(`The most related instances are specimen${mostRelatedPair.instance1.specimenNum} and specimen${mostRelatedPair.instance2.specimenNum} with ${mostRelatedPair.similarity.toFixed(2)}% DNA similarity.`);
 
 
 
