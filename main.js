@@ -49,15 +49,23 @@ const pAequorFactory = (specimenNum, dna) => {
 };
 
 const mutantGenerator = () => {
-  let survivers = [];
-  do {
-    const randomSpecimen = Math.floor(Math.random()*1000);
+  let survivors = [];
+  let generatedSpecimenNumbers = new Set();
+
+  while (survivors.length < 31) {
+    let randomSpecimen;
+    do {
+      randomSpecimen = Math.floor(Math.random() * 1000);
+    } while (generatedSpecimenNumbers.has(randomSpecimen));
+
     let mutant = pAequorFactory(randomSpecimen, mockUpStrand());
-    if(mutant.willLikelySurvive()) {
-      survivers.push(mutant);
+    if (mutant.willLikelySurvive()) {
+      survivors.push(mutant);
+      generatedSpecimenNumbers.add(randomSpecimen);
     }
-  } while (survivers.length < 31);
-  return survivers;
+  }
+  
+  return survivors;
 };
 
 
